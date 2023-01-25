@@ -1,4 +1,4 @@
-public class Stack{
+public class Stack{ // LIFO
     static class Node{
         char value;
         Node next = null;
