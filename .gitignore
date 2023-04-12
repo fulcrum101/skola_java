@@ -1,2 +1,5 @@
 # Project exclude paths
 /out/
+/src/Transform/build/
+/src/Transform/dist/
+/src/Transform/nbproject/private/

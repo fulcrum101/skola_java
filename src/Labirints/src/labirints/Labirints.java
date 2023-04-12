@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.Stack;
 
 public class Labirints extends javax.swing.JFrame {
     int m,n; //labirinta rindu un kolonnu skaits
@@ -29,6 +30,8 @@ public class Labirints extends javax.swing.JFrame {
         lasa = new javax.swing.JButton();
         zime = new javax.swing.JButton();
         panelis = new javax.swing.JPanel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jSpinner2 = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,30 +60,47 @@ public class Labirints extends javax.swing.JFrame {
             .addGap(0, 267, Short.MAX_VALUE)
         );
 
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 20, 1));
+
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, 20, 1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(776, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lasa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(zime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(zime, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(panelis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinner2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(776, Short.MAX_VALUE)
+                        .addComponent(lasa)))
                 .addGap(15, 15, 15))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(panelis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lasa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(zime)
-                .addGap(18, 18, 18)
-                .addComponent(panelis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addComponent(panelis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(zime)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -94,6 +114,8 @@ public class Labirints extends javax.swing.JFrame {
             String[] tmp=failaRinda.split(" ");    //sadala to atsevišķos gabaliņos, kurus saliek masīvā tmp
             m=Integer.parseInt(tmp[0]);            //iegūst rindu skaitu
             n=Integer.parseInt(tmp[1]);            //iegūst kolonnu skaitu
+            jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, n*m, 1));
+            jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, n*m, 1));
             System.out.println(m+" "+n);           //izvada rindu un kolonnu skaitu testa nolūkiem
             Graphics2D g=(Graphics2D)panelis.getGraphics();
             g.setStroke(new BasicStroke(5));
@@ -177,20 +199,47 @@ public class Labirints extends javax.swing.JFrame {
 
     private void zimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zimeActionPerformed
       // te jānolasa lietotāja vēlmes no kuras uz kuru rūtiņu jāmeklē ceļš
-        zimetCelu(1,6);
+        int vs = (int)jSpinner1.getValue();
+        int ve = (int)jSpinner2.getValue();
+        zimetCelu(vs,ve);
     }//GEN-LAST:event_zimeActionPerformed
     public void zimetCelu(int no,int uz){
-       Stack<Integer> cels=mekletCelu(no,uz);
-       Graphics g=panelis.getGraphics();
+       Stack<Integer> st = mekletCelu(no,uz);
+       Graphics2D g=(Graphics2D)panelis.getGraphics();
+       
+       
        // te jāraksta cikls ceļa zimēšanai
        g.setColor(Color.red);
-       g.drawLine(10,10, 10, 30);
+       g.setStroke(new BasicStroke(3));
+       int i = st.pop() - 1;
+       int ix, iy, jx, jy;
+       int j;
+       while (!st.empty()){
+           j = st.pop() - 1;
+//           System.out.println(i + " " + j);
+           iy = i / n;
+           ix = i % n;
+           jy = j / n;
+           jx = j % n;
+           g.drawLine((int)((ix + 0.5)*SIZE), (int)((iy + 0.5) * SIZE), (int)((jx + 0.5) * SIZE), (int)((jy+0.5)*SIZE));
+           i = j;
+           
+       }
     }
-    public Stack<Integer> mekletCelu(int no, int uz){
-        Stack<Integer> cels=new Stack();
+    public Stack<Integer> mekletCelu(int vs, int ve){
+        Stack<Integer> st=new Stack();
         // te jāraksta ceļa meklēšnas algoritms
-        return cels;
+        int[] no = new int[n*m+1];
+        no = BFS(vs, ve);
+        int i = ve;
+        while (i!=-1){
+            st.push(i);
+//            System.out.println(i);
+            i = no[i];
+        }
+        return st;
     }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -223,14 +272,37 @@ public class Labirints extends javax.swing.JFrame {
         });
     }
     
-//    public void BFS(int vs){
-//        Queue<Integer> q = new LinkedList<>();
-//        ArrayList<Integer>[] apmeklets = new ArrayList<Integer>(Collections.copies(n*m, false));
-//        q.add(vs);
-//        apmeklets(vs) = true;
-//        while(!q.isEempty())
-//    }
+    public int[] BFS(int vs, int ve){
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] apmeklets = new boolean[n*m+1];
+        Arrays.fill(apmeklets, false);
+        int[] no = new int[n*m+1];
+        no[vs] = -1;
+        q.add(vs);
+        apmeklets[vs] = true;
+        int p;
+        while(!q.isEmpty()){
+            p = q.remove();
+            for (int u : labirints[p-1]){
+                 if (!apmeklets[u]){
+                     q.add(u);
+                     apmeklets[u] = true;
+                     no[u] = p;
+                     if (ve==u){
+                         break;
+                     }
+                 }
+            }
+        }
+        
+//        for (int i = 0; i < n*m; i++){
+//            System.out.println(i + " "+ no[i]);
+//        }
+        return no;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
     private javax.swing.JButton lasa;
     private javax.swing.JPanel panelis;
     private javax.swing.JButton zime;
