@@ -10,6 +10,10 @@ import java.io.IOException;
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Collections;
+
 public class Labirints extends javax.swing.JFrame {
     int m,n; //labirinta rindu un kolonnu skaits
     public Labirints() {
@@ -113,33 +117,39 @@ public class Labirints extends javax.swing.JFrame {
                     labirints[i].add(Integer.parseInt(tmp[j]));
                 }
                 g.setColor(panelis.getBackground());
-                int ix = (((i+1) % n == 0) ? n : (i+1) % n - 1);
-                int iy = (i+1) / n;
+                int iy = i / n;
+                int ix = i % n;
                 for (int j : labirints[i]){
-                    int tx = ((j % n == 0) ? n : j % n - 1);
-                    int ty = j / n;
-                    System.out.println("i: " + (i+1) + " = " + ix + " " + iy);
-                    System.out.println("j: " + j + " = " + tx + " " + ty);
-                    if (Math.abs(i-j)==1){
+                    int jy = (j-1) / n;
+                    int jx = (j-1) % n;
+//                    System.out.println((i+1) + " - " + ix + " " + iy);
+//                    System.out.println((j+1) + " - " + jx + " " + jy);
+                    if (Math.abs(i-(j-1))==1){
                         // horizontal neighbors
-                        if (i > j) { // |j|i|
+//                        System.out.println("horiz " + i + " " + (j-1));
+                        if (i > (j-1)) { // |j|i|
+//                            System.out.println((j-1) + " " + i + " -> " + ix + " " + iy + " " + ix + " " + (iy+1));
                             g.drawLine(ix * SIZE, iy * SIZE, ix * SIZE, (iy + 1) * SIZE);
                         } else { // |i|j|
-                            g.drawLine(tx * SIZE, ty * SIZE, tx * SIZE, (ty + 1) * SIZE);
+//                            System.out.println(i + " " + (j-1) + " -> " + jx + " " + jy + " " + jx + " " + (jy+1));
+                            g.drawLine(jx * SIZE, jy * SIZE, jx * SIZE, (jy + 1) * SIZE);
                         }
                         
                     } else {
                         // vertical neghbors
-                        if (i > j) {
+//                        System.out.println("vert " + i + " " + (j-1));
+                        if (i > (j-1)) {
                             // |j|
                             // |-|
                             // |i|
-                            g.drawLine(ix * SIZE, ty * SIZE, (ix + 1) * SIZE, ty * SIZE);
+                            System.out.println((j-1) + " " + i + " -> " + ix + " " + jy + " " + (ix+1) + " " + jy);
+                            g.drawLine(ix * SIZE, (jy+1) * SIZE, (ix + 1) * SIZE, (jy+1) * SIZE);
                         } else {
                             // |i|
                             // |-|
                             // |j|
-                            g.drawLine(tx * SIZE, iy * SIZE, (tx + 1) * SIZE, iy * SIZE);
+                            System.out.println(i + " " + (j-1) + " -> " + jx + " " + iy + " " + (jx+1) + " " + iy);
+                            g.drawLine(jx * SIZE, (iy+1) * SIZE, (jx + 1) * SIZE, (iy+1) * SIZE);
                         }
                     }
                 }
@@ -213,6 +223,13 @@ public class Labirints extends javax.swing.JFrame {
         });
     }
     
+//    public void BFS(int vs){
+//        Queue<Integer> q = new LinkedList<>();
+//        ArrayList<Integer>[] apmeklets = new ArrayList<Integer>(Collections.copies(n*m, false));
+//        q.add(vs);
+//        apmeklets(vs) = true;
+//        while(!q.isEempty())
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton lasa;
     private javax.swing.JPanel panelis;
