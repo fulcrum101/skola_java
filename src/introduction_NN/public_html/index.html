@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Intro to NN in JS</h1>
+
+        <br>
+
+        <canvas id="pointGraph" width="500" height="500" style="border:1px solid #000000;"></canvas>	
+        <script>
+            // A(m, n) * B(n, k) = C(m, k)
+            // init canva
+            let c = document.getElementById("pointGraph");
+            var ctx = c.getContext("2d");
+
+            // 1. array with points
+            let points = [];
+            // points = [[x1, y1, 1], [x2, y2, 1], [x3, y3, 1], ...]
+            // shape points = (500, 3)
+            for (let i = 0; i < 500; i++) {
+                points.push([Math.random() * 500, c.height - Math.random() * 500, 1]);
+            }
+
+            let w=[[-0.27429150322572426], [0.22462755492468917], [-7.533492472734972]];
+            
+            
+            function reizina(points,w){
+                let rez=[];
+                for(let i=0;i<points.length;i++){
+                    let sum=0;
+                    for(let j=0;j<points[i].length;j++){
+                        sum+=points[i][j]*w[j];
+                    }
+                    rez.push(sum);
+                }
+                return rez;
+            }
+
+            let rez=reizina(points,w);
+
+           
+            
+            for (let i = 0; i < points.length; i++) {
+                if (rez[i] > 0) {
+                    ctx.fillStyle = "#FF0000";
+                } else {
+                    ctx.fillStyle = "#00FF00";
+                }
+                ctx.fillRect(points[i][0], c.height - points[i][1], 5, 5);
+            }
+        </script>
+    </body>
+</html>
+

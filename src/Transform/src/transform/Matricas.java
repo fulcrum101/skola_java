@@ -10,7 +10,13 @@ public class Matricas {
                 return null;
             }
             double[][] c = new double[aRows][bCols];
-            // te jâraksta cikli
+            for (int i = 0; i < aRows; i++) {
+                for (int j = 0; j < bCols; j++) {
+                    for (int k = 0; k < aCols; k++) {
+                        c[i][j] += a[i][k] * b[k][j];
+                    }
+                }
+            }
             return c;
         } catch (Exception e) {
             return null;
@@ -27,7 +33,11 @@ public class Matricas {
                 return null;
             }
             double[][] c = new double[aRows][aCols];
-            // te jâraksta cikli
+            for (int i = 0; i < aRows; i++) {
+                for (int j = 0; j < aCols; j++) {
+                    c[i][j] = a[i][j] + b[i][j];
+                }
+            }
             return c;
         } catch (Exception e) {
             return null;
