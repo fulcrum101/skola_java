@@ -16,10 +16,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 
         <canvas id="pointGraph" width="500" height="500" style="border:1px solid #000000;"></canvas>	
         <script>
+            // constants
+            const LR = 0.0000002; // learning rate
+            const EPOCHS = 1000; // number of iterations
+            const ERROR_BOUNDARIES = 0.000001; // error boundaries
+
             // A(m, n) * B(n, k) = C(m, k)
             // init canva
             let c = document.getElementById("pointGraph");
             var ctx = c.getContext("2d");
+
+            let f = (x) => x*1.2 +  50;
+
+            function drawLine(){
+                ctx.strokeStyle = "blue";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([7, 7]);
+                ctx.beginPath();
+                ctx.moveTo(0, c.height - f(0));
+                ctx.lineTo(c.width, c.height - f(c.width));
+                ctx.stroke();
+            }
 
             // 1. array with points
             let points = [];
@@ -29,9 +46,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 points.push([Math.random() * 500, c.height - Math.random() * 500, 1]);
             }
 
-            let w=[[-0.27429150322572426], [0.22462755492468917], [-7.533492472734972]];
+            // generate andom number between -1 and 1
+            function randomWeight(){
+                return Math.random()*2-1;
+            }
+
+            let w=[[randomWeight()], [randomWeight()], [randomWeight()]];
             
             
+
             function reizina(points,w){
                 let rez=[];
                 for(let i=0;i<points.length;i++){
@@ -44,19 +67,54 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 return rez;
             }
 
-            let rez=reizina(points,w);
+            // let rez=reizina(points,w);
 
-           
-            
-            for (let i = 0; i < points.length; i++) {
-                if (rez[i] > 0) {
-                    ctx.fillStyle = "#FF0000";
+            function perceptron(input){
+                let result = reizina(input, w);
+                if (result > 0) {
+                    return 1;
                 } else {
-                    ctx.fillStyle = "#00FF00";
+                    return 0;
                 }
-                ctx.fillRect(points[i][0], c.height - points[i][1], 5, 5);
             }
+
+            function drawPoints(){
+                ctx.clearRect(0, 0, c.width, c.height);	
+                drawLine();
+                for (let i = 0; i < points.length; i++) {
+                    if (perceptron([points[i]]) > 0) {
+                        ctx.fillStyle = "#FF0000";
+                    } else {
+                        ctx.fillStyle = "#00FF00";
+                    }
+                    ctx.fillRect(points[i][0], c.height - points[i][1], 5, 5);
+                }
+            }
+
+            function train(){
+                let ERROR = 0;
+                for (let j = 0; j < EPOCHS; j++){
+                    for (let i = 0; i < points.length; i++){
+                        let answer = 0;
+                        if (points[i][1] > f(points[i][0])) {
+                            answer = 1;
+                        }
+                        let error_ep = answer - perceptron([points[i]]);
+                        ERROR += error_ep;
+                        if (error_ep!=0){
+                            for (let k = 0; k < points[i].length; k++){
+                                w[k][0] += LR * error_ep * points[i][k];
+                            }
+                        }
+                    }
+                    ERROR = ERROR / points.length;
+                    if (ERROR < ERROR_BOUNDARIES) {
+                        break;
+                    }
+                    console.log("EPOCH: " + j + ": error " + ERROR);                    drawPoints();
+                }
+            }
+            train();
         </script>
     </body>
 </html>
-
