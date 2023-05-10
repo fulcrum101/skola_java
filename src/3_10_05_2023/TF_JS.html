@@ -1,0 +1,37 @@
+<!-- kods no https://www.codingame.com/playgrounds/59631/neural-network-xor-example-from-scratch-no-libs -->
+<html>
+    <head>
+        <title>TF JS</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    </head>
+    <body>
+        <h3> hello TF JS</h3>
+        <div id="output"> </div>
+        <script>
+            // data
+            const X = tf.tensor([[0, 0], [0, 1], [1, 0 ], [1, 1]]);
+            const y = tf.tensor([[0], [0], [0], [1]]);
+
+            const inputs = tf.layers.input({shape: [2]});
+            const x = tf.layers.dense({units: 1, activation: 'linear'}).apply(inputs);
+            const outputs  = tf.layers.dense({units: 1, activation: 'sigmoid'}).apply(x);
+            const model = tf.model({inputs: inputs, outputs: outputs});
+
+            model.compile({optimizer: 'adam', loss: 'binaryCrossentropy', metrics:['accuracy']});
+
+            model.fit(X, y, {epochs: 10}).then(() => {
+                model.predict(X).array().then( pred_prob => {
+                    console.log(pred_prob);
+                    console.log(X);
+                    for (let i=0; i<4; i++) {                        
+                        document.getElementById("output").innerHTML += X[i][0] + " " + X[i][1]+ " = " + pred_prob[i] + "<br>";
+                    }
+                    
+                });
+            });
+
+        </script>
+    </body>
+</html>

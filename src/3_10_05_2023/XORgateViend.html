@@ -1,0 +1,107 @@
+<!-- kods no https://www.codingame.com/playgrounds/59631/neural-network-xor-example-from-scratch-no-libs -->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <link rel="shortcut icon" href="#">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+<script>
+function reizina(a,b){
+  if (a.length != b.length) {
+      return null;
+  }
+  let c = 0;
+  for(let i=0; i<a.length; i++){
+     c+=a[i]*b[i];
+  }
+ return c;
+}
+function sigmoid(x){
+    return 1.0 / (1.0 + Math.exp(-x));
+    // return Math.tanh(x);
+    //return Math.max(0,x);
+
+}
+function sigmoid_prime(x){
+    return x * (1 - x);
+//    return 1-x*x;
+   //if(x<=0)return 0; else return 1;
+}
+function atbilde(x,y){
+   if(x!=y)return 1; else return 0;
+}
+const learnRate=0.2;
+let hW = [];
+for(let i=0;i<3;i++){
+   let row=[];
+   for(let j=0;j<3;j++) row.push(Math.random()-0.5);
+   hW.push(row);
+}
+let oW = [];
+for(let i=0;i<4;i++){
+   oW.push(Math.random()-0.5);
+}
+let ievads=[];
+for(let i=0;i<500;i++){
+    ievads.push([Math.floor(Math.random()*2),Math.floor(Math.random()*2),1]);
+}
+function predict(dati){
+    let hiddens = [];
+    for(let i=0; i<3;i++){
+        let rez=reizina(dati,hW[i]);
+        hiddens.push(sigmoid(rez));
+    }
+    hiddens.push(1);
+    let output = sigmoid(reizina(hiddens,oW));
+    return output;
+}
+function learn(dati){
+    let hiddens = [];
+    for(let i=0; i<3;i++){
+        let rez=reizina(dati,hW[i]);
+        hiddens.push(sigmoid(rez));
+    }
+    hiddens.push(1);
+    let output = sigmoid(reizina(hiddens,oW));
+    let atb=atbilde(dati[0],dati[1]);
+    let error= atb-output;
+    std+=error**2;
+    let derror = error * sigmoid_prime(output);
+    let dW = [];
+    for (let j=0; j< 4; j++){
+       dW.push(derror * oW[j] * sigmoid_prime(hiddens[j]));
+    }
+    for (let i=0; i<4; i++){
+        oW[i] += learnRate * hiddens[i] * derror;
+    }
+    for (let i=0; i< 3; i++){
+        for (let j=0; j< 3; j++) hW[i][j] += learnRate * dati[j] * dW[i];
+      }
+}    
+let std=1;
+for(let ep=0; ep<10000 && std>0.2 && std>0; ep++){
+   std=0; 
+   ievads=[];
+   for(let i=0;i<500;i++){
+    ievads.push([Math.floor(Math.random()*2),Math.floor(Math.random()*2),1]);
+   }
+   for(let i=0;i<500;i++){
+      learn(ievads[i]);
+   }
+   std=Math.sqrt(std/500);
+   console.log("pēc "+ep+" epohām kļūda ir "+std)
+}
+let result = predict([0,0,1]);
+document.write("0 0 "+" expected 0 "+result+"<br>");
+result = predict([0,1,1]);
+document.write("0 1 "+" expected 1 "+result+"<br>");
+result = predict([1,0,1]);
+document.write("1 0 "+" expected 1 "+result+"<br>");
+result = predict([1,1,1]);
+document.write("1 1 "+" expected 0 "+result+"<br>");
+ 
+</script>
+</body>
+</html>
